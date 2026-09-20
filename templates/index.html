@@ -1090,26 +1090,275 @@
 
         }
 
-        @media (max-width: 650px) {
+        /* ================= MOBILE RESPONSIVE ================= */
 
-            .sidebar {
-                display: none;
-            }
+@media (max-width: 650px) {
 
-            .main {
-                margin-left: 0;
-                width: 100%;
-            }
+    body {
+        overflow-x: hidden;
+    }
 
-            .content {
-                padding: 25px 18px;
-            }
+    /* Sidebar becomes top navigation */
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: auto;
+        padding: 15px 14px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,.08);
+        backdrop-filter: blur(20px);
+    }
 
-            .hero h1 {
-                font-size: 30px;
-            }
+    /* Brand */
+    .brand {
+        padding: 4px 5px 18px;
+        gap: 10px;
+    }
 
-        }
+    .brain-logo {
+        width: 40px;
+        height: 40px;
+        font-size: 21px;
+    }
+
+    .brand h2 {
+        font-size: 18px;
+    }
+
+    .brand p {
+        font-size: 7px;
+    }
+
+    /* Workspace label */
+    .section-label {
+        padding: 0 5px;
+        margin-bottom: 8px;
+        font-size: 8px;
+    }
+
+    /* Navigation */
+    .nav-item {
+        display: inline-block;
+        width: calc(50% - 5px);
+        margin: 0 5px 8px 0;
+        padding: 11px 9px;
+        text-align: center;
+        font-size: 11px;
+    }
+
+    .nav-item:hover {
+        transform: none;
+    }
+
+    /* Hide bottom sidebar text */
+    .sidebar-bottom {
+        display: none;
+    }
+
+    /* Main */
+    .main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    /* Top bar */
+    .topbar {
+        height: 55px;
+        padding: 0 18px;
+        justify-content: flex-end;
+    }
+
+    .system-status {
+        font-size: 10px;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+    }
+
+    /* Main content */
+    .content {
+        padding: 25px 15px;
+    }
+
+    /* Hero */
+    .hero {
+        margin-bottom: 22px;
+    }
+
+    .hero-label {
+        font-size: 8px;
+        padding: 5px 9px;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+        line-height: 1.2;
+        letter-spacing: -.5px;
+    }
+
+    .hero p {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    /* All grids become single column */
+    .cards,
+    .overview-grid,
+    .about-grid,
+    .comparison,
+    .tumor-info-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    /* Cards */
+    .overview-card,
+    .about-card,
+    .card,
+    .tumor-info-card {
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    .overview-card h2,
+    .about-card h2,
+    .tumor-info-card h2 {
+        font-size: 17px;
+    }
+
+    .overview-card p,
+    .about-card p,
+    .tumor-info-card p {
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    /* Flow */
+    .flow {
+        gap: 6px;
+        margin-top: 18px;
+    }
+
+    .flow-step {
+        padding: 8px 9px;
+        font-size: 9px;
+    }
+
+    .arrow {
+        font-size: 10px;
+    }
+
+    /* Stats */
+    .stats {
+        gap: 9px;
+    }
+
+    .stat {
+        padding: 13px;
+    }
+
+    .stat strong {
+        font-size: 11px;
+    }
+
+    /* MRI upload */
+    .upload-area {
+        padding: 30px 12px;
+    }
+
+    .upload-icon {
+        width: 58px;
+        height: 58px;
+        font-size: 25px;
+    }
+
+    .upload-area h3 {
+        font-size: 14px;
+    }
+
+    .upload-area p {
+        font-size: 10px;
+    }
+
+    /* Preview */
+    .preview-container {
+        width: 160px;
+        height: 160px;
+    }
+
+    /* Result */
+    .result-box {
+        min-height: 300px;
+    }
+
+    .prediction-result h2 {
+        font-size: 23px;
+    }
+
+    .confidence {
+        font-size: 30px;
+    }
+
+    .confidence-meter {
+        width: 90%;
+    }
+
+    /* Tumor images */
+    .scan-image {
+        height: 220px;
+    }
+
+    .scan-card {
+        padding: 14px;
+    }
+
+    /* Disclaimer */
+    .disclaimer {
+        font-size: 9px;
+        padding: 12px 13px;
+    }
+
+}
+
+
+/* ================= SMALL PHONES ================= */
+
+@media (max-width: 400px) {
+
+    .content {
+        padding: 20px 12px;
+    }
+
+    .nav-item {
+        font-size: 10px;
+        padding: 10px 6px;
+    }
+
+    .hero h1 {
+        font-size: 25px;
+    }
+
+    .flow-step {
+        font-size: 8px;
+        padding: 7px 7px;
+    }
+
+    .card-title {
+        font-size: 16px;
+    }
+
+    .prediction-result h2 {
+        font-size: 21px;
+    }
+
+    .scan-image {
+        height: 190px;
+    }
+
+}
 
     </style>
 
