@@ -1,505 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#071321">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>NeuroVision | AI Medical Imaging</title>
+    <title>NeuroVision | Brain MRI Analysis</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Segoe UI", Arial, sans-serif;
         }
 
         html {
             scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
-            text-size-adjust: 100%;
         }
 
         body {
-            min-height: 100vh;
-            min-height: 100dvh;
-            background:
-                radial-gradient(circle at 80% 10%, rgba(37,130,255,.14), transparent 30%),
-                radial-gradient(circle at 10% 90%, rgba(0,188,212,.10), transparent 28%),
-                #071321;
-            color: #eaf4ff;
-            overflow-x: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
         }
 
-        /* ================= BACKGROUND ================= */
-
-        .background {
-            position: fixed;
-            inset: 0;
-            overflow: hidden;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(75px);
-            opacity: .18;
-            animation: orbFloat 10s ease-in-out infinite alternate;
-        }
-
-        .orb.one {
-            width: 300px;
-            height: 300px;
-            background: #1479ff;
-            top: -120px;
-            right: 15%;
-        }
-
-        .orb.two {
-            width: 260px;
-            height: 260px;
-            background: #00bcd4;
-            bottom: -120px;
-            left: 8%;
-            animation-delay: 2s;
-        }
-
-        .orb.three {
-            width: 180px;
-            height: 180px;
-            background: #4267ff;
-            top: 45%;
-            right: -70px;
-            animation-delay: 4s;
-        }
-
-        @keyframes orbFloat {
-
-            from {
-                transform: translate(0,0) scale(1);
-            }
-
-            to {
-                transform: translate(35px,-25px) scale(1.12);
-            }
-
-        }
-
-        /* ================= LAYOUT ================= */
-
-        .layout {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            min-height: 100dvh;
+        .navbar {
+            width: 100%;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 7%;
             display: flex;
-        }
-
-        /* ================= SIDEBAR ================= */
-
-        .sidebar {
-            width: 250px;
-            position: fixed;
-            left: 0;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
             top: 0;
-            bottom: 0;
-            padding: 28px 18px;
-            background: rgba(5,19,35,.82);
-            border-right: 1px solid rgba(255,255,255,.08);
-            backdrop-filter: blur(25px);
-            z-index: 10;
+            z-index: 1000;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 4px 10px 42px;
-        }
-
-        .brain-logo {
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 14px;
+        .logo {
+            color: #1769aa;
             font-size: 24px;
-            background: linear-gradient(135deg,#1687ff,#27c7e8);
-            box-shadow: 0 0 25px rgba(32,150,255,.35);
-            animation: logoPulse 3s infinite;
+            font-weight: 800;
+            letter-spacing: -0.5px;
         }
 
-        @keyframes logoPulse {
-
-            0%,100% {
-                box-shadow: 0 0 20px rgba(32,150,255,.25);
-            }
-
-            50% {
-                box-shadow: 0 0 35px rgba(32,150,255,.55);
-            }
-
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
         }
 
-        .brand h2 {
-            font-size: 21px;
-        }
-
-        .brand h2 span {
-            color: #43c6ff;
-        }
-
-        .brand p {
-            margin-top: 3px;
-            font-size: 8px;
-            letter-spacing: 1px;
-            color: #7f9bb5;
-        }
-
-        .section-label {
-            padding: 0 12px;
-            margin-bottom: 10px;
-            font-size: 9px;
-            letter-spacing: 1.8px;
-            color: #7390aa;
-        }
-
-        .nav-item {
-            padding: 13px 15px;
-            margin-bottom: 7px;
-            border-radius: 10px;
-            color: #a8bfd3;
-            font-size: 13px;
-            transition: .3s;
+        .nav-links button {
+            border: none;
+            background: transparent;
+            color: #475467;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
+            padding: 5px;
         }
 
-        /* icon + label inside each nav item */
-
-        .nav-icon {
-            display: inline-block;
-            min-width: 18px;
-            margin-right: 6px;
-            text-align: center;
+        .nav-links button:hover {
+            color: #1769aa;
         }
 
-        .nav-item:hover {
-            background: rgba(255,255,255,.055);
-            color: white;
-            transform: translateX(4px);
-        }
-
-        .nav-item.active {
-            color: white;
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(25,122,218,.95),
-                    rgba(22,91,166,.7)
-                );
-            box-shadow: 0 8px 25px rgba(12,103,190,.22);
-        }
-
-        .sidebar-bottom {
-            position: absolute;
-            bottom: 25px;
-            left: 28px;
-            right: 25px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,.07);
-            color: #7892aa;
-            font-size: 10px;
-            line-height: 1.7;
-        }
-
-        /* ================= MAIN ================= */
-
-        .main {
-            margin-left: 250px;
-            width: calc(100% - 250px);
-        }
-
-        .topbar {
-            height: 72px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 0 42px;
-            background: rgba(5,18,32,.62);
-            border-bottom: 1px solid rgba(255,255,255,.07);
-            backdrop-filter: blur(20px);
-        }
-
-        .system-status {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            color: #a7bed2;
-            font-size: 12px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #20dc8a;
-            box-shadow:
-                0 0 0 5px rgba(32,220,138,.09),
-                0 0 15px rgba(32,220,138,.55);
-            animation: statusBlink 2s infinite;
-        }
-
-        @keyframes statusBlink {
-
-            50% {
-                opacity: .35;
-            }
-
-        }
-
-        /* ================= CONTENT ================= */
-
-        .content {
-            padding: 48px;
+        .container {
+            width: 86%;
+            max-width: 1250px;
+            margin: auto;
         }
 
         .page-section {
             display: none;
-            animation: sectionIn .5s ease;
+            min-height: calc(100vh - 75px);
+            padding: 55px 0;
         }
 
-        .page-section.active-section {
+        .page-section.active {
             display: block;
         }
 
-        @keyframes sectionIn {
-
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-        }
-
-        /* ================= HERO ================= */
-
         .hero {
-            margin-bottom: 32px;
+            margin-bottom: 35px;
         }
 
         .hero-label {
-            display: inline-block;
-            padding: 6px 11px;
-            border-radius: 20px;
-            background: rgba(35,139,230,.10);
-            border: 1px solid rgba(54,160,244,.20);
-            color: #55bfff;
-            font-size: 9px;
+            color: #1769aa;
+            font-size: 13px;
+            font-weight: 800;
             letter-spacing: 1.5px;
-            margin-bottom: 13px;
+            margin-bottom: 12px;
         }
 
         .hero h1 {
-            font-size: 38px;
+            color: #172033;
+            font-size: 44px;
             line-height: 1.15;
-            letter-spacing: -1px;
+            margin-bottom: 15px;
         }
 
         .hero h1 span {
-            background: linear-gradient(90deg,#42bfff,#5c8cff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #1769aa;
         }
 
         .hero p {
-            margin-top: 11px;
-            color: #a1b6c9;
-            font-size: 14px;
+            max-width: 700px;
+            color: #667085;
+            font-size: 16px;
+            line-height: 1.7;
         }
 
-        /* ================= COMMON CARDS ================= */
-
-        .overview-grid,
-        .about-grid {
+        .overview-grid {
             display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            gap: 22px;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
         }
 
         .overview-card,
-        .about-card,
         .card,
-        .tumor-info-card {
-            padding: 28px;
-            border-radius: 18px;
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(17,39,61,.78),
-                    rgba(8,24,41,.82)
-                );
-            border: 1px solid rgba(255,255,255,.08);
-            box-shadow: 0 20px 55px rgba(0,0,0,.16);
-            backdrop-filter: blur(20px);
-            transition: .3s;
+        .about-content,
+        .tumor-box {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05);
         }
 
-        .overview-card:hover,
-        .about-card:hover,
-        .card:hover,
-        .tumor-info-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(57,166,255,.22);
+        .overview-card {
+            padding: 30px;
         }
 
-        .overview-card h2,
-        .about-card h2,
-        .tumor-info-card h2 {
-            font-size: 19px;
-            margin-bottom: 13px;
+        .overview-card h2 {
+            color: #172033;
+            font-size: 23px;
+            margin-bottom: 15px;
         }
 
-        .overview-card p,
-        .about-card p,
-        .tumor-info-card p {
-            color: #a9bdd0;
-            font-size: 13px;
+        .overview-card p {
+            color: #667085;
             line-height: 1.8;
         }
-
-        /* ================= DASHBOARD ================= */
 
         .flow {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 24px;
             flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
         }
 
         .flow-step {
-            padding: 9px 13px;
+            background: #eef6fc;
+            color: #1769aa;
+            padding: 11px 15px;
             border-radius: 9px;
-            background: rgba(33,132,218,.10);
-            border: 1px solid rgba(48,150,235,.15);
-            color: #afd0e8;
-            font-size: 11px;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         .arrow {
-            color: #55aee5;
+            color: #98a2b3;
         }
 
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 20px;
+        .info-card {
+            padding: 30px;
+            border-radius: 16px;
+            background: #1769aa;
+            color: #ffffff;
+            box-shadow: 0 8px 30px rgba(23, 105, 170, 0.18);
         }
 
-        .stat {
-            padding: 17px;
+        .info-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .disclaimer {
+            margin-top: 25px;
+            padding: 18px;
             border-radius: 12px;
-            background: rgba(2,16,29,.45);
-            border: 1px solid rgba(255,255,255,.05);
-        }
-
-        .stat span {
-            display: block;
-            color: #7d98b0;
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-        }
-
-        .stat strong {
-            color: #c2d7e8;
+            background: #fff8e7;
+            border: 1px solid #f2dfaa;
+            color: #735c18;
             font-size: 13px;
-            font-weight: 500;
+            line-height: 1.6;
         }
-
-        /* ================= MRI ANALYSIS ================= */
 
         .cards {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            gap: 25px;
+        }
+
+        .card {
+            padding: 28px;
         }
 
         .card-title {
-            font-size: 18px;
-            font-weight: 600;
+            color: #172033;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 7px;
         }
 
         .card-subtitle {
-            color: #94aac0;
-            font-size: 12px;
-            margin-top: 6px;
+            color: #667085;
+            font-size: 14px;
             margin-bottom: 25px;
         }
 
         .upload-area {
-            border: 1.5px dashed rgba(94,147,190,.38);
-            border-radius: 16px;
-            padding: 40px 20px;
+            padding: 35px 20px;
             text-align: center;
-            background: rgba(3,17,31,.35);
-            transition: .3s;
-        }
-
-        .upload-area:hover {
-            border-color: #2897ed;
-            background: rgba(24,117,190,.06);
+            border: 2px dashed #cbd5e1;
+            border-radius: 14px;
+            background: #f8fafc;
         }
 
         .upload-icon {
-            width: 68px;
-            height: 68px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 20px;
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(28,139,239,.15),
-                    rgba(31,200,224,.07)
-                );
-            font-size: 29px;
-            animation: scanFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes scanFloat {
-
-            50% {
-                transform: translateY(-7px);
-            }
-
+            font-size: 45px;
+            margin-bottom: 12px;
         }
 
         .upload-area h3 {
-            margin-top: 17px;
-            font-size: 15px;
+            color: #172033;
+            margin-bottom: 8px;
         }
 
         .upload-area p {
-            color: #9aafc2;
-            font-size: 11px;
-            margin: 8px 0 18px;
+            color: #667085;
+            font-size: 13px;
+            margin-bottom: 20px;
         }
 
         #fileInput {
@@ -508,2426 +248,950 @@
 
         .browse-btn {
             display: inline-block;
-            padding: 10px 23px;
-            border-radius: 8px;
-            background: linear-gradient(90deg,#1478d1,#219ee4);
-            color: white;
-            font-size: 12px;
+            padding: 12px 22px;
+            border-radius: 9px;
+            background: #1769aa;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            transition: .3s;
         }
 
         .browse-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(25,145,225,.25);
-        }
-
-        /* ================= MRI PREVIEW ================= */
-
-        .preview-container {
-            display: none;
-            width: 180px;
-            height: 180px;
-            margin: 20px auto 12px;
-            border-radius: 14px;
-            overflow: hidden;
-            background: #050b12;
-            border: 1px solid rgba(66,183,255,.35);
-            box-shadow: 0 0 25px rgba(24,140,220,.15);
-            animation: previewAppear .45s ease;
-        }
-
-        .preview-container.show {
-            display: block;
-        }
-
-        .preview-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        @keyframes previewAppear {
-
-            from {
-                opacity: 0;
-                transform: scale(.9);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-
+            background: #12598f;
         }
 
         .file-name {
-            min-height: 18px;
-            margin-top: 14px;
-            color: #55c3fa;
-            font-size: 11px;
+            margin-top: 15px;
+            color: #1769aa;
+            font-size: 13px;
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .preview-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .preview-container img {
+            width: 190px;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid #d0d5dd;
         }
 
         .analyze-btn {
             width: 100%;
-            margin-top: 19px;
+            margin-top: 20px;
             padding: 14px;
             border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 13px;
-            font-weight: 600;
-            background: linear-gradient(90deg,#0f3f69,#176ca9);
+            border-radius: 9px;
+            background: #172033;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 800;
             cursor: pointer;
-            transition: .3s;
         }
 
         .analyze-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(15,99,162,.3);
+            background: #0f172a;
         }
 
-        /* ================= AI SCANNING ================= */
-
-        .analysis-loader {
-            display: none;
-            width: 100%;
-            text-align: center;
-            animation: loaderAppear .45s ease;
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
-
-        .analysis-loader.show {
-            display: block;
-        }
-
-        .ai-scanner {
-            width: 115px;
-            height: 115px;
-            margin: 0 auto 22px;
-            border-radius: 50%;
-            border: 2px solid rgba(55,170,255,.18);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(26,142,224,.12),
-                    rgba(4,18,32,.35)
-                );
-            box-shadow:
-                0 0 30px rgba(25,145,225,.12),
-                inset 0 0 25px rgba(25,145,225,.08);
-            overflow: hidden;
-        }
-
-        .ai-scanner::before {
-            content: "";
-            position: absolute;
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                #38b9ff,
-                transparent
-            );
-            box-shadow: 0 0 15px #38b9ff;
-            animation: scanLine 1.5s linear infinite;
-        }
-
-        .ai-scanner::after {
-            content: "";
-            position: absolute;
-            inset: 10px;
-            border-radius: 50%;
-            border: 1px dashed rgba(67,190,255,.32);
-            animation: scannerRotate 3s linear infinite;
-        }
-
-        .scanner-icon {
-            position: relative;
-            z-index: 3;
-            font-size: 36px;
-            animation: brainPulse 1.5s ease-in-out infinite;
-        }
-
-        .analysis-loader h3 {
-            color: #dcefff;
-            font-size: 17px;
-            margin-bottom: 8px;
-        }
-
-        .analysis-loader p {
-            color: #91aabd;
-            font-size: 11px;
-        }
-
-        .loading-dots::after {
-            content: "";
-            animation: dots 1.5s infinite;
-        }
-
-        @keyframes scanLine {
-
-            0% {
-                transform: translateY(-48px);
-            }
-
-            50% {
-                transform: translateY(48px);
-            }
-
-            100% {
-                transform: translateY(-48px);
-            }
-
-        }
-
-        @keyframes scannerRotate {
-
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-
-        }
-
-        @keyframes brainPulse {
-
-            0%,100% {
-                transform: scale(1);
-                opacity: .75;
-            }
-
-            50% {
-                transform: scale(1.13);
-                opacity: 1;
-            }
-
-        }
-
-        @keyframes loaderAppear {
-
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-        }
-
-        @keyframes dots {
-
-            0% {
-                content: "";
-            }
-
-            25% {
-                content: ".";
-            }
-
-            50% {
-                content: "..";
-            }
-
-            75%,100% {
-                content: "...";
-            }
-
-        }
-
-        /* ================= RESULT ================= */
 
         .result-box {
             min-height: 320px;
+            padding: 25px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            background: #f8fafc;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-        }
-
-        .result-placeholder {
             text-align: center;
-            color: #91a7bb;
         }
 
-        .result-placeholder .icon {
-            width: 75px;
-            height: 75px;
-            margin: auto auto 17px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(35,139,230,.07);
-            font-size: 32px;
-            animation: idlePulse 2.8s infinite;
-        }
-
-        @keyframes idlePulse {
-
-            50% {
-                transform: scale(1.06);
-            }
-
-        }
-
-        .result-placeholder p {
-            font-size: 12px;
-            line-height: 1.6;
-            color: #9eb4c7;
-        }
-
-        /* ================= PROFESSIONAL RESULT ================= */
-
-        .prediction-result {
+        .result-content {
             width: 100%;
-            text-align: center;
-            animation: resultAppear .8s ease;
         }
 
-        @keyframes resultAppear {
-
-            from {
-                opacity: 0;
-                transform: translateY(18px) scale(.97);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-
+        .result-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
         }
 
-        .result-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 7px 13px;
-            border-radius: 20px;
-            margin-bottom: 16px;
-            font-size: 9px;
-            font-weight: 600;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            background: rgba(50,155,235,.10);
-            border: 1px solid rgba(70,170,240,.18);
-            color: #65c6ff;
+        .result-label {
+            color: #667085;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
 
-        .result-status-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #42bfff;
-            box-shadow: 0 0 10px rgba(66,191,255,.6);
+        .result-value {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 15px;
         }
 
-        .prediction-icon {
-            width: 82px;
-            height: 82px;
-            margin: 0 auto 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 24px;
-            font-size: 34px;
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(28,139,239,.15),
-                    rgba(31,200,224,.07)
-                );
-            border: 1px solid rgba(75,175,235,.15);
-            box-shadow: 0 15px 35px rgba(0,0,0,.16);
+        .tumor {
+            color: #d92d20;
         }
 
-        .prediction-result h2 {
-            font-size: 30px;
-            letter-spacing: 1px;
-            color: #edf8ff;
-        }
-
-        .result-description {
-            margin: 7px auto 20px;
-            max-width: 330px;
-            color: #8fa8bd;
-            font-size: 11px;
-            line-height: 1.6;
-        }
-
-        .confidence-label {
-            color: #8da6ba;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
+        .normal {
+            color: #16803c;
         }
 
         .confidence {
-            margin-top: 4px;
-            font-size: 35px;
-            font-weight: 700;
-            color: #48bcff;
-        }
-
-        .confidence-meter {
-            width: 82%;
-            margin: 14px auto 0;
-        }
-
-        .confidence-track {
-            width: 100%;
-            height: 7px;
-            border-radius: 20px;
-            overflow: hidden;
-            background: rgba(255,255,255,.07);
-            box-shadow: inset 0 0 4px rgba(0,0,0,.3);
-        }
-
-        .confidence-fill {
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-            background:
-                linear-gradient(
-                    90deg,
-                    #168bd7,
-                    #44c4ff
-                );
-            box-shadow: 0 0 12px rgba(55,185,255,.35);
-            animation: fillConfidence 1.4s ease;
-        }
-
-        @keyframes fillConfidence {
-
-            from {
-                width: 0;
-            }
-
-            to {
-                width: 100%;
-            }
-
-        }
-
-        .confidence-scale {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 7px;
-            color: #617d94;
-            font-size: 8px;
-        }
-
-        .result-footer {
-            display: flex;
-            justify-content: center;
-            gap: 9px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .result-tag {
-            padding: 6px 10px;
-            border-radius: 7px;
-            background: rgba(255,255,255,.035);
-            border: 1px solid rgba(255,255,255,.06);
-            color: #829bb0;
-            font-size: 9px;
-        }
-
-        .error-message {
-            text-align: center;
-            color: #ff8585;
-            font-size: 12px;
-        }
-
-        /* ================= ABOUT TUMOR ================= */
-
-        .comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 22px;
-            margin-bottom: 22px;
-        }
-
-        .scan-card {
-            padding: 18px;
-            border-radius: 18px;
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(17,39,61,.78),
-                    rgba(8,24,41,.82)
-                );
-            border: 1px solid rgba(255,255,255,.08);
-            transition: .3s;
-        }
-
-        .scan-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(57,166,255,.22);
-        }
-
-        .scan-card h3 {
+            color: #475467;
             font-size: 15px;
-            margin-bottom: 13px;
         }
 
-        .scan-image {
-            height: 270px;
-            border-radius: 13px;
-            background: #050b12;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .scan-image img {
+        .error-box {
             width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-            border-radius: 13px;
-            transition: transform .5s ease;
-        }
-
-        .scan-image:hover img {
-            transform: scale(1.04);
-        }
-
-        .scan-image::after {
-            content: "MRI IMAGE";
-            position: absolute;
-            bottom: 10px;
-            right: 12px;
-            font-size: 8px;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,.45);
-            pointer-events: none;
-        }
-
-        .scan-label {
-            margin-top: 12px;
-            color: #9aafc2;
-            font-size: 10px;
-            line-height: 1.6;
-        }
-
-        .tumor-info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 22px;
-        }
-
-        .info-list {
-            display: grid;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .info-item {
-            padding: 13px 15px;
+            padding: 16px;
             border-radius: 10px;
-            background: rgba(18,104,166,.07);
-            border: 1px solid rgba(40,140,210,.10);
-            color: #b0c4d6;
-            font-size: 12px;
+            background: #fff1f0;
+            border: 1px solid #fecdca;
+            color: #b42318;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
-        /* ================= ABOUT SYSTEM ================= */
-
-        .feature-list {
-            margin-top: 15px;
-            display: grid;
-            gap: 10px;
-        }
-
-        .feature {
-            padding: 12px 14px;
-            border-radius: 9px;
-            background: rgba(20,110,180,.07);
-            border: 1px solid rgba(40,140,210,.10);
-            color: #adc2d5;
-            font-size: 12px;
-        }
-
-        /* ================= DISCLAIMER ================= */
-
-        .disclaimer {
-            margin-top: 20px;
-            padding: 14px 17px;
-            border-radius: 11px;
-            background: rgba(13,45,70,.35);
-            border: 1px solid rgba(80,156,211,.10);
-            color: #8da6bb;
-            font-size: 10px;
+        .empty-result {
+            color: #98a2b3;
+            font-size: 14px;
             line-height: 1.7;
         }
 
-        .disclaimer strong {
-            color: #b9d0e2;
+        .loader {
+            display: none;
+            width: 100%;
         }
 
-        /* ================= TOUCH DEVICES ================= */
-
-        /* No "stuck" hover effects after tapping on phones/tablets */
-        @media (hover: none) {
-
-            .overview-card:hover,
-            .about-card:hover,
-            .card:hover,
-            .tumor-info-card:hover,
-            .scan-card:hover,
-            .browse-btn:hover,
-            .analyze-btn:hover {
-                transform: none;
-            }
-
-            .scan-image:hover img {
-                transform: none;
-            }
-
+        .spinner {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 18px;
+            border: 4px solid #dbeafe;
+            border-top-color: #1769aa;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
         }
 
-        /* ================= TABLET ================= */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-        @media (max-width: 950px) {
+        .loader h3 {
+            color: #172033;
+            margin-bottom: 8px;
+        }
 
-            .sidebar {
-                width: 210px;
+        .loader p {
+            color: #667085;
+            font-size: 13px;
+        }
+
+        .about-content {
+            padding: 30px;
+            color: #667085;
+            line-height: 1.8;
+        }
+
+        .about-content h2,
+        .about-content h3 {
+            color: #172033;
+        }
+
+        .about-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .about-content h3 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .tumor-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .tumor-box {
+            padding: 25px;
+        }
+
+        .tumor-box img {
+            width: 100%;
+            max-height: 260px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #f8fafc;
+            margin-bottom: 18px;
+        }
+
+        .tumor-box h3 {
+            color: #1769aa;
+            margin-bottom: 12px;
+        }
+
+        .tumor-box p {
+            color: #667085;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .footer {
+            padding: 25px;
+            text-align: center;
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            color: #98a2b3;
+            font-size: 12px;
+        }
+
+        @media (max-width: 850px) {
+            .navbar {
+                padding: 16px 5%;
+                flex-direction: column;
+                gap: 15px;
             }
 
-            .main {
-                margin-left: 210px;
-                width: calc(100% - 210px);
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
             }
 
-            .content {
-                padding: 36px 28px;
+            .container {
+                width: 90%;
             }
 
-            .cards,
             .overview-grid,
-            .about-grid,
-            .comparison,
-            .tumor-info-grid {
+            .cards,
+            .tumor-info {
                 grid-template-columns: 1fr;
             }
 
+            .hero h1 {
+                font-size: 35px;
+            }
         }
 
-        /* ================= MOBILE LAYOUT ================= */
-        /*
-           Phone layout:
-           - Fixed top header  : logo + name (left), system status (right)
-           - Fixed bottom bar  : the 4 navigation tabs (thumb-friendly)
-           - Scrollable content between them
-        */
-
-        @media (max-width: 768px) {
-
-            html {
-                scroll-padding-top: 80px;
+        @media (max-width: 500px) {
+            .nav-links button {
+                font-size: 12px;
             }
 
-            body {
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            /* Stack layout instead of side-by-side columns */
-            .layout {
-                display: block;
-            }
-
-            /* Sidebar box disappears; its children become the mobile header + tab bar */
-            .sidebar {
-                display: contents;
-            }
-
-            .section-label,
-            .sidebar-bottom {
-                display: none;
-            }
-
-            /* ---------- TOP HEADER (brand) ---------- */
-
-            .brand {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 20;
-                height: calc(62px + env(safe-area-inset-top, 0px));
-                padding: env(safe-area-inset-top, 0px) 16px 0;
-                gap: 11px;
-                background: rgba(5,19,35,.9);
-                border-bottom: 1px solid rgba(255,255,255,.08);
-                -webkit-backdrop-filter: blur(20px);
-                backdrop-filter: blur(20px);
-            }
-
-            .brain-logo {
-                width: 40px;
-                height: 40px;
-                font-size: 21px;
-                border-radius: 12px;
-                flex-shrink: 0;
-            }
-
-            .brand h2 {
-                font-size: 18px;
-                line-height: 1.15;
-            }
-
-            .brand p {
-                margin-top: 2px;
-                font-size: 7.5px;
-            }
-
-            /* System status sits on the right side of the header */
-            .topbar {
-                position: fixed;
-                top: 0;
-                right: 0;
-                z-index: 21;
-                height: calc(62px + env(safe-area-inset-top, 0px));
-                padding: env(safe-area-inset-top, 0px) 16px 0;
-                background: none;
-                border-bottom: none;
-                -webkit-backdrop-filter: none;
-                backdrop-filter: none;
-                pointer-events: none;
-            }
-
-            .system-status {
-                gap: 8px;
-                font-size: 11px;
-                white-space: nowrap;
-            }
-
-            .status-dot {
-                width: 7px;
-                height: 7px;
-            }
-
-            /* ---------- BOTTOM TAB BAR (navigation) ---------- */
-
-            .nav {
-                position: fixed;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: 20;
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 6px;
-                padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
-                background: rgba(5,19,35,.94);
-                border-top: 1px solid rgba(255,255,255,.08);
-                -webkit-backdrop-filter: blur(20px);
-                backdrop-filter: blur(20px);
-            }
-
-            .nav-item {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 4px;
-                min-height: 54px;
-                margin: 0;
-                padding: 8px 2px;
-                border-radius: 12px;
-                font-size: 10.5px;
-                line-height: 1.2;
-                text-align: center;
-            }
-
-            .nav-icon {
-                min-width: 0;
-                margin: 0;
-                font-size: 18px;
-                line-height: 1;
-            }
-
-            .nav-item:hover {
-                transform: none;
-            }
-
-            .nav-item:not(.active):hover {
-                background: transparent;
-                color: #a8bfd3;
-            }
-
-            .nav-item.active {
-                box-shadow: 0 4px 14px rgba(12,103,190,.28);
-            }
-
-            /* ---------- MAIN AREA ---------- */
-
-            .main {
-                margin-left: 0;
-                width: 100%;
-                padding-top: calc(62px + env(safe-area-inset-top, 0px));
-                padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
-            }
-
-            .content {
-                padding: 24px 16px 28px;
-            }
-
-            /* ---------- HERO ---------- */
-
-            .hero {
-                margin-bottom: 22px;
-            }
-
-            .hero-label {
-                font-size: 9px;
-                padding: 6px 11px;
-                margin-bottom: 12px;
-                letter-spacing: 1.3px;
+            .page-section {
+                padding: 35px 0;
             }
 
             .hero h1 {
                 font-size: 30px;
-                line-height: 1.15;
-                letter-spacing: -.5px;
             }
 
-            .hero p {
-                margin-top: 10px;
-                font-size: 13.5px;
-                line-height: 1.6;
-            }
-
-            /* ---------- GRIDS & CARDS ---------- */
-
-            .cards,
-            .overview-grid,
-            .about-grid,
-            .comparison,
-            .tumor-info-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .comparison {
-                margin-bottom: 16px;
-            }
-
-            .overview-card,
-            .about-card,
-            .card,
-            .tumor-info-card {
-                padding: 22px 20px;
-                border-radius: 16px;
-                box-shadow: 0 12px 34px rgba(0,0,0,.16);
-                -webkit-backdrop-filter: none;
-                backdrop-filter: none;
-            }
-
-            .overview-card h2,
-            .about-card h2,
-            .tumor-info-card h2 {
-                font-size: 17px;
-                margin-bottom: 11px;
-            }
-
-            .overview-card p,
-            .about-card p,
-            .tumor-info-card p {
-                font-size: 13px;
-                line-height: 1.75;
-            }
-
-            /* ---------- DASHBOARD ---------- */
-
-            /* Vertical step flow: no more arrows dangling at the start of a line */
             .flow {
                 flex-direction: column;
-                align-items: stretch;
-                gap: 4px;
-                margin-top: 20px;
-            }
-
-            .flow-step {
-                padding: 11px 12px;
-                font-size: 12px;
-                text-align: center;
+                align-items: flex-start;
             }
 
             .arrow {
-                align-self: center;
-                font-size: 12px;
-                line-height: 1;
-                transform: rotate(90deg);
+                display: none;
             }
-
-            .stats {
-                gap: 10px;
-                margin-top: 18px;
-            }
-
-            .stat {
-                padding: 14px;
-            }
-
-            .stat span {
-                font-size: 9px;
-            }
-
-            .stat strong {
-                display: block;
-                font-size: 12.5px;
-                line-height: 1.4;
-            }
-
-            /* ---------- MRI ANALYSIS ---------- */
-
-            .card-title {
-                font-size: 17px;
-            }
-
-            .card-subtitle {
-                font-size: 12.5px;
-                margin-bottom: 20px;
-            }
-
-            .upload-area {
-                padding: 28px 16px;
-                border-radius: 14px;
-            }
-
-            .upload-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 26px;
-                border-radius: 18px;
-            }
-
-            .upload-area h3 {
-                margin-top: 15px;
-                font-size: 15px;
-            }
-
-            .upload-area p {
-                font-size: 12px;
-                margin: 7px 0 18px;
-            }
-
-            .browse-btn {
-                padding: 12px 26px;
-                font-size: 13px;
-                border-radius: 10px;
-            }
-
-            .preview-container {
-                width: 170px;
-                height: 170px;
-            }
-
-            .file-name {
-                font-size: 12px;
-                overflow-wrap: anywhere;
-                word-break: break-word;
-            }
-
-            .analyze-btn {
-                margin-top: 16px;
-                padding: 15px;
-                font-size: 14px;
-                border-radius: 12px;
-            }
-
-            .analysis-loader p {
-                font-size: 12px;
-            }
-
-            /* ---------- RESULT ---------- */
-
-            .result-box {
-                min-height: 290px;
-            }
-
-            .result-placeholder p {
-                font-size: 13px;
-            }
-
-            .result-status {
-                font-size: 10px;
-            }
-
-            .prediction-result h2 {
-                font-size: 24px;
-                letter-spacing: .5px;
-            }
-
-            .result-description {
-                font-size: 12px;
-                max-width: 300px;
-            }
-
-            .confidence-label {
-                font-size: 10.5px;
-            }
-
-            .confidence {
-                font-size: 32px;
-            }
-
-            .confidence-meter {
-                width: 92%;
-            }
-
-            .confidence-scale {
-                font-size: 9px;
-            }
-
-            .result-footer {
-                gap: 7px;
-                margin-top: 18px;
-            }
-
-            .result-tag {
-                font-size: 9.5px;
-            }
-
-            .error-message {
-                font-size: 13px;
-            }
-
-            /* ---------- ABOUT TUMOR ---------- */
-
-            .scan-card {
-                padding: 14px;
-                border-radius: 16px;
-            }
-
-            .scan-card h3 {
-                font-size: 15px;
-            }
-
-            .scan-image {
-                height: 230px;
-            }
-
-            .scan-label {
-                font-size: 11.5px;
-                line-height: 1.65;
-            }
-
-            .info-list {
-                gap: 8px;
-            }
-
-            .info-item {
-                padding: 12px 14px;
-                font-size: 13px;
-            }
-
-            /* ---------- ABOUT SYSTEM ---------- */
-
-            .feature-list {
-                gap: 8px;
-            }
-
-            .feature {
-                padding: 12px 14px;
-                font-size: 13px;
-            }
-
-            /* ---------- DISCLAIMER ---------- */
-
-            .disclaimer {
-                margin-top: 16px;
-                padding: 14px 16px;
-                font-size: 11px;
-                line-height: 1.7;
-            }
-
         }
-
-        /* ================= SMALL PHONES ================= */
-
-        @media (max-width: 380px) {
-
-            .content {
-                padding: 20px 14px 26px;
-            }
-
-            .brand {
-                padding-left: 14px;
-                padding-right: 14px;
-            }
-
-            .topbar {
-                padding-right: 14px;
-            }
-
-            .brand h2 {
-                font-size: 17px;
-            }
-
-            .system-status {
-                font-size: 10px;
-                gap: 6px;
-            }
-
-            .nav {
-                gap: 4px;
-                padding-left: 8px;
-                padding-right: 8px;
-            }
-
-            .nav-item {
-                font-size: 10px;
-            }
-
-            .hero h1 {
-                font-size: 26px;
-            }
-
-            .hero p {
-                font-size: 13px;
-            }
-
-            .overview-card,
-            .about-card,
-            .card,
-            .tumor-info-card {
-                padding: 20px 16px;
-            }
-
-            .flow-step {
-                font-size: 11.5px;
-            }
-
-            .stat {
-                padding: 12px;
-            }
-
-            .stat strong {
-                font-size: 12px;
-            }
-
-            .card-title {
-                font-size: 16px;
-            }
-
-            .upload-area {
-                padding: 24px 12px;
-            }
-
-            .preview-container {
-                width: 150px;
-                height: 150px;
-            }
-
-            .prediction-result h2 {
-                font-size: 21px;
-            }
-
-            .confidence {
-                font-size: 28px;
-            }
-
-            .scan-image {
-                height: 200px;
-            }
-
-        }
-
     </style>
-
 </head>
-
 
 <body>
 
+    <nav class="navbar">
 
-<div class="background">
+        <div class="logo">
+            NeuroVision
+        </div>
 
-    <div class="orb one"></div>
-    <div class="orb two"></div>
-    <div class="orb three"></div>
+        <div class="nav-links">
 
-</div>
+            <button type="button" onclick="showSection('dashboard')">
+                Dashboard
+            </button>
+
+            <button type="button" onclick="showSection('analysis')">
+                MRI Analysis
+            </button>
+
+            <button type="button" onclick="showSection('about')">
+                About System
+            </button>
+
+            <button type="button" onclick="showSection('tumor')">
+                About Tumor
+            </button>
+
+        </div>
+
+    </nav>
 
 
-<div class="layout">
+    <main class="container">
 
+        <section id="dashboard" class="page-section active">
 
-    <!-- SIDEBAR -->
+            <div class="hero">
 
-    <aside class="sidebar">
+                <div class="hero-label">
+                    AI • BRAIN MRI CLASSIFICATION
+                </div>
 
-        <div class="brand">
-
-            <div class="brain-logo">
-                🧠
-            </div>
-
-            <div>
-
-                <h2>
-                    Neuro<span>Vision</span>
-                </h2>
+                <h1>
+                    Welcome to
+                    <span>NeuroVision</span>
+                </h1>
 
                 <p>
-                    AI MEDICAL IMAGING
+                    AI-assisted brain MRI image classification platform
+                    for tumor and normal brain image analysis.
                 </p>
 
             </div>
 
-        </div>
 
+            <div class="overview-grid">
 
-        <div class="section-label">
-            WORKSPACE
-        </div>
+                <div class="overview-card">
 
-
-        <nav class="nav">
-
-            <div
-                class="nav-item active"
-                onclick="showSection('dashboard', this)"
-            >
-                <span class="nav-icon">⌂</span>
-                <span class="nav-text">Dashboard</span>
-            </div>
-
-
-            <div
-                class="nav-item"
-                onclick="showSection('analysis', this)"
-            >
-                <span class="nav-icon">◉</span>
-                <span class="nav-text">MRI Analysis</span>
-            </div>
-
-
-            <div
-                class="nav-item"
-                onclick="showSection('tumor', this)"
-            >
-                <span class="nav-icon">⚠️</span>
-                <span class="nav-text">About Tumor</span>
-            </div>
-
-
-            <div
-                class="nav-item"
-                onclick="showSection('about', this)"
-            >
-                <span class="nav-icon">ⓘ</span>
-                <span class="nav-text">About System</span>
-            </div>
-
-        </nav>
-
-
-        <div class="sidebar-bottom">
-
-            AI-assisted brain MRI
-            classification system
-
-            <br><br>
-
-            NeuroVision • v1.0
-
-        </div>
-
-    </aside>
-
-
-    <!-- MAIN -->
-
-    <main class="main">
-
-
-        <header class="topbar">
-
-            <div class="system-status">
-
-                <span class="status-dot"></span>
-
-                System Online
-
-            </div>
-
-        </header>
-
-
-        <section class="content">
-
-
-            <!-- DASHBOARD -->
-
-            <div
-                id="dashboard"
-                class="page-section active-section"
-            >
-
-                <div class="hero">
-
-                    <div class="hero-label">
-                        AI • NEURO IMAGING • OVERVIEW
-                    </div>
-
-                    <h1>
-                        Welcome to
-                        <span>NeuroVision</span>
-                    </h1>
+                    <h2>
+                        Project Overview
+                    </h2>
 
                     <p>
-                        AI-assisted brain MRI image classification platform.
+                        NeuroVision is an AI-powered brain MRI image
+                        classification system designed to analyze MRI
+                        images using a trained deep learning model.
+                        The system processes an uploaded image and
+                        generates a classification result together
+                        with the model confidence.
                     </p>
 
-                </div>
+                    <div class="flow">
 
-
-                <div class="overview-grid">
-
-
-                    <div class="overview-card">
-
-                        <h2>
-                            Project Overview
-                        </h2>
-
-                        <p>
-
-                            NeuroVision is an AI-powered
-                            brain MRI image classification
-                            system designed to analyze
-                            MRI images using a trained
-                            deep learning model.
-
-                            The system processes the
-                            uploaded image and generates
-                            a classification result together
-                            with the model confidence.
-
-                        </p>
-
-
-                        <div class="flow">
-
-                            <div class="flow-step">
-                                Upload MRI
-                            </div>
-
-                            <div class="arrow">→</div>
-
-                            <div class="flow-step">
-                                Preprocessing
-                            </div>
-
-                            <div class="arrow">→</div>
-
-                            <div class="flow-step">
-                                AI Model
-                            </div>
-
-                            <div class="arrow">→</div>
-
-                            <div class="flow-step">
-                                Prediction
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="overview-card">
-
-                        <h2>
-                            System Information
-                        </h2>
-
-                        <div class="stats">
-
-                            <div class="stat">
-
-                                <span>
-                                    Input
-                                </span>
-
-                                <strong>
-                                    Brain MRI
-                                </strong>
-
-                            </div>
-
-
-                            <div class="stat">
-
-                                <span>
-                                    Model
-                                </span>
-
-                                <strong>
-                                    Deep Learning
-                                </strong>
-
-                            </div>
-
-
-                            <div class="stat">
-
-                                <span>
-                                    Processing
-                                </span>
-
-                                <strong>
-                                    Image Classification
-                                </strong>
-
-                            </div>
-
-
-                            <div class="stat">
-
-                                <span>
-                                    Output
-                                </span>
-
-                                <strong>
-                                    Tumor / Normal
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="disclaimer">
-
-                    <strong>
-                        System Note:
-                    </strong>
-
-                    NeuroVision is an AI-assisted research
-                    and educational system. Its predictions
-                    should not be considered a medical diagnosis.
-
-                </div>
-
-            </div>
-
-
-            <!-- MRI ANALYSIS -->
-
-            <div
-                id="analysis"
-                class="page-section"
-            >
-
-                <div class="hero">
-
-                    <div class="hero-label">
-                        AI • MRI ANALYSIS
-                    </div>
-
-                    <h1>
-                        Brain MRI
-                        <span>Analysis</span>
-                    </h1>
-
-                    <p>
-                        Upload an MRI scan and run the
-                        NeuroVision classification model.
-                    </p>
-
-                </div>
-
-
-                <div class="cards">
-
-
-                    <!-- UPLOAD -->
-
-                    <div class="card">
-
-                        <div class="card-title">
+                        <div class="flow-step">
                             Upload MRI
                         </div>
 
-                        <div class="card-subtitle">
-                            Select a brain MRI image
-                            for analysis.
+                        <div class="arrow">
+                            →
+                        </div>
+
+                        <div class="flow-step">
+                            Preprocessing
+                        </div>
+
+                        <div class="arrow">
+                            →
+                        </div>
+
+                        <div class="flow-step">
+                            AI Model
+                        </div>
+
+                        <div class="arrow">
+                            →
+                        </div>
+
+                        <div class="flow-step">
+                            Prediction
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <h3>
+                        System Information
+                    </h3>
+
+                    <div class="info-item">
+                        Input: Brain MRI Image
+                    </div>
+
+                    <div class="info-item">
+                        Image Size: 128 × 128
+                    </div>
+
+                    <div class="info-item">
+                        Model: Deep Learning
+                    </div>
+
+                    <div class="info-item">
+                        Output: Tumor / Normal
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="disclaimer">
+
+                <strong>System Note:</strong>
+
+                NeuroVision is an AI-assisted research and educational
+                system. Its predictions should not be considered a
+                medical diagnosis.
+
+            </div>
+
+        </section>
+
+
+        <section id="analysis" class="page-section">
+
+            <div class="hero">
+
+                <div class="hero-label">
+                    AI • MRI ANALYSIS
+                </div>
+
+                <h1>
+                    Brain MRI
+                    <span>Analysis</span>
+                </h1>
+
+                <p>
+                    Upload an MRI scan and run the NeuroVision
+                    classification model.
+                </p>
+
+            </div>
+
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="card-title">
+                        Upload MRI
+                    </div>
+
+                    <div class="card-subtitle">
+                        Select a brain MRI image for analysis.
+                    </div>
+
+
+                    <form
+                        id="mriForm"
+                        enctype="multipart/form-data"
+                    >
+
+                        <div class="upload-area">
+
+                            <div class="upload-icon">
+                                🧠
+                            </div>
+
+                            <h3>
+                                Upload MRI Scan
+                            </h3>
+
+                            <p id="uploadText">
+                                JPG, JPEG or PNG images supported
+                            </p>
+
+                            <label
+                                for="fileInput"
+                                class="browse-btn"
+                            >
+                                Choose MRI Image
+                            </label>
+
+                            <input
+                                type="file"
+                                id="fileInput"
+                                name="image"
+                                accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                            >
+
+
+                            <div
+                                class="preview-container"
+                                id="previewContainer"
+                            >
+
+                                <img
+                                    id="mriPreview"
+                                    src=""
+                                    alt="MRI Preview"
+                                >
+
+                            </div>
+
+
+                            <div
+                                class="file-name"
+                                id="fileName"
+                            ></div>
+
                         </div>
 
 
-                        <form
-                            method="POST"
-                            enctype="multipart/form-data"
+                        <button
+                            type="submit"
+                            class="analyze-btn"
+                            id="analyzeButton"
+                        >
+                            Analyze MRI
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-title">
+                        Analysis Result
+                    </div>
+
+                    <div class="card-subtitle">
+                        AI classification output.
+                    </div>
+
+
+                    <div class="result-box">
+
+                        <div
+                            class="loader"
+                            id="loader"
                         >
 
+                            <div class="spinner"></div>
 
-                            <div class="upload-area">
+                            <h3>
+                                Analyzing MRI
+                            </h3>
+
+                            <p>
+                                NeuroVision is processing the image...
+                            </p>
+
+                        </div>
 
 
-                                <div
-                                    class="upload-icon"
-                                    id="uploadIcon"
-                                >
+                        <div
+                            class="result-content"
+                            id="resultContent"
+                        >
+
+                            <div class="empty-result">
+
+                                <div class="result-icon">
                                     🧠
                                 </div>
 
-
-                                <h3>
-                                    Upload MRI Scan
-                                </h3>
-
-
-                                <p id="uploadText">
-                                    JPG, JPEG or PNG images supported
-                                </p>
-
-
-                                <label
-                                    for="fileInput"
-                                    class="browse-btn"
-                                >
-                                    Choose MRI Image
-                                </label>
-
-
-                                <input
-                                    type="file"
-                                    id="fileInput"
-                                    name="image"
-                                    accept=".jpg,.jpeg,.png"
-                                    required
-                                >
-
-
-                                <div
-                                    class="preview-container"
-                                    id="previewContainer"
-                                >
-
-                                    <img
-                                        id="mriPreview"
-                                        src=""
-                                        alt="MRI Preview"
-                                    >
-
-                                </div>
-
-
-                                <div
-                                    class="file-name"
-                                    id="fileName"
-                                ></div>
-
-
-                            </div>
-
-
-                            <button
-                                type="submit"
-                                class="analyze-btn"
-                                id="analyzeButton"
-                            >
-                                Analyze MRI
-                            </button>
-
-
-                        </form>
-
-                    </div>
-
-
-                    <!-- RESULT -->
-
-                    <div class="card">
-
-
-                        <div class="card-title">
-                            Analysis Result
-                        </div>
-
-
-                        <div class="card-subtitle">
-                            AI classification output.
-                        </div>
-
-
-                        <div class="result-box">
-
-
-                            <!-- LOADER -->
-
-                            <div
-                                class="analysis-loader"
-                                id="analysisLoader"
-                            >
-
-                                <div class="ai-scanner">
-
-                                    <div class="scanner-icon">
-                                        🧠
-                                    </div>
-
-                                </div>
-
-
-                                <h3>
-                                    Analyzing MRI
-                                    <span class="loading-dots"></span>
-                                </h3>
-
-
                                 <p>
-                                    AI model is processing the MRI scan
+                                    Upload an MRI image and click
+                                    <strong>Analyze MRI</strong>
+                                    to view the AI classification result.
                                 </p>
 
                             </div>
-
-
-                            {% if prediction %}
-
-
-                            <!-- PROFESSIONAL RESULT -->
-
-                            <div
-                                class="prediction-result"
-                                id="predictionResult"
-                            >
-
-
-                                <div class="result-status">
-
-                                    <span class="result-status-dot"></span>
-
-                                    AI ANALYSIS COMPLETE
-
-                                </div>
-
-
-                                {% if prediction == "TUMOR" %}
-
-
-                                <div class="prediction-icon">
-                                    ⚠️
-                                </div>
-
-
-                                <h2>
-                                    TUMOR DETECTED
-                                </h2>
-
-
-                                <div class="result-description">
-
-                                    The trained model classified
-                                    the uploaded MRI image as
-                                    tumor-positive.
-
-                                </div>
-
-
-                                {% else %}
-
-
-                                <div class="prediction-icon">
-                                    ✓
-                                </div>
-
-
-                                <h2>
-                                    NORMAL BRAIN
-                                </h2>
-
-
-                                <div class="result-description">
-
-                                    The trained model classified
-                                    the uploaded MRI image as
-                                    normal.
-
-                                </div>
-
-
-                                {% endif %}
-
-
-                                <div class="confidence-label">
-                                    MODEL CONFIDENCE
-                                </div>
-
-
-                                <div class="confidence">
-
-                                    {{ "%.2f"|format(confidence) }}%
-
-                                </div>
-
-
-                                <div class="confidence-meter">
-
-                                    <div class="confidence-track">
-
-                                        <div
-                                            class="confidence-fill"
-                                            style="width: {{ confidence }}%;"
-                                        ></div>
-
-                                    </div>
-
-
-                                    <div class="confidence-scale">
-
-                                        <span>
-                                            0%
-                                        </span>
-
-                                        <span>
-                                            50%
-                                        </span>
-
-                                        <span>
-                                            100%
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-
-                                <div class="result-footer">
-
-                                    <div class="result-tag">
-                                        AI CLASSIFICATION
-                                    </div>
-
-                                    <div class="result-tag">
-                                        MRI IMAGE
-                                    </div>
-
-                                    <div class="result-tag">
-                                        CONFIDENCE SCORE
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-
-
-                            {% elif error %}
-
-
-                            <div class="error-message">
-
-                                ⚠️
-
-                                <br><br>
-
-                                {{ error }}
-
-                            </div>
-
-
-                            {% else %}
-
-
-                            <div
-                                class="result-placeholder"
-                                id="resultPlaceholder"
-                            >
-
-                                <div class="icon">
-                                    🔬
-                                </div>
-
-                                <p>
-                                    Upload an MRI image
-                                    <br>
-                                    to begin AI analysis.
-                                </p>
-
-                            </div>
-
-
-                            {% endif %}
-
 
                         </div>
 
                     </div>
 
-
                 </div>
-
-
-                <div class="disclaimer">
-
-                    <strong>
-                        Research & Educational Use:
-                    </strong>
-
-                    NeuroVision is an AI-assisted research
-                    system. Results represent model predictions
-                    and should not be considered a medical diagnosis.
-
-                </div>
-
 
             </div>
 
 
-            <!-- ABOUT TUMOR -->
+            <div class="disclaimer">
 
-            <div
-                id="tumor"
-                class="page-section"
-            >
+                <strong>Important:</strong>
+
+                This system is intended for research and educational
+                purposes only. AI predictions are not a substitute
+                for professional medical diagnosis.
+
+            </div>
+
+        </section>
 
 
-                <div class="hero">
+        <section id="about" class="page-section">
 
-                    <div class="hero-label">
-                        NEUROSCIENCE • MRI EDUCATION
-                    </div>
+            <div class="hero">
 
-                    <h1>
-                        Understanding
-                        <span>Brain Tumors</span>
-                    </h1>
+                <div class="hero-label">
+                    NEUROVISION • SYSTEM
+                </div>
+
+                <h1>
+                    About
+                    <span>System</span>
+                </h1>
+
+                <p>
+                    Understanding the NeuroVision AI-based MRI
+                    classification system.
+                </p>
+
+            </div>
+
+
+            <div class="about-content">
+
+                <h2>
+                    NeuroVision Brain MRI Classification
+                </h2>
+
+                <p>
+                    NeuroVision is a deep learning based brain MRI
+                    image classification project. The system accepts
+                    an MRI image from the user, preprocesses the image,
+                    and passes it through a trained neural network
+                    model.
+                </p>
+
+
+                <h3>
+                    Processing Pipeline
+                </h3>
+
+                <p>
+                    The uploaded MRI image is converted to grayscale,
+                    resized to 128 × 128 pixels, normalized between
+                    0 and 1, and provided to the trained model for
+                    classification.
+                </p>
+
+
+                <h3>
+                    Classification Output
+                </h3>
+
+                <p>
+                    The model produces a prediction score which is
+                    converted into either TUMOR or NORMAL classification
+                    along with a confidence percentage.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section id="tumor" class="page-section">
+
+            <div class="hero">
+
+                <div class="hero-label">
+                    BRAIN MRI • INFORMATION
+                </div>
+
+                <h1>
+                    About
+                    <span>Brain Tumor</span>
+                </h1>
+
+                <p>
+                    General educational information about brain tumors
+                    and MRI-based analysis.
+                </p>
+
+            </div>
+
+
+            <div class="tumor-info">
+
+                <div class="tumor-box">
+
+                    <img
+                        src="/static/normal_brain.png"
+                        alt="Normal Brain MRI"
+                    >
+
+                    <h3>
+                        Normal Brain
+                    </h3>
 
                     <p>
-                        Visual reference and general information
-                        about normal and tumor-affected brain MRI.
+                        A normal brain MRI generally shows the expected
+                        anatomical structures without an abnormal mass
+                        or lesion identified by the imaging study.
                     </p>
 
                 </div>
 
 
-                <div class="comparison">
-
-
-                    <div class="scan-card">
-
-                        <h3>
-                            🧠 Normal Brain MRI
-                        </h3>
-
-
-                        <div class="scan-image">
-
-                            <img
-                                src="{{ url_for('static', filename='normal_brain.png') }}"
-                                alt="Normal Brain MRI"
-                            >
-
-                        </div>
-
-
-                        <div class="scan-label">
-
-                            Typical appearance of brain
-                            structures without an identified
-                            tumor lesion.
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="scan-card">
-
-                        <h3>
-                            ⚠️ Tumor-Affected MRI
-                        </h3>
-
-
-                        <div class="scan-image">
-
-                            <img
-                                src="{{ url_for('static', filename='tumor_brain.png') }}"
-                                alt="Tumor Brain MRI"
-                            >
-
-                        </div>
-
-
-                        <div class="scan-label">
-
-                            MRI may show an abnormal
-                            mass or lesion depending on
-                            tumor type, location and imaging
-                            characteristics.
-
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-
-                <div class="tumor-info-grid">
-
-
-                    <div class="tumor-info-card">
-
-                        <h2>
-                            What is a Brain Tumor?
-                        </h2>
-
-                        <p>
-
-                            A brain tumor is an abnormal
-                            growth of cells in or around
-                            the brain. Brain tumors can
-                            differ in their type, size,
-                            location and growth behavior.
-
-                        </p>
-
-                    </div>
-
-
-                    <div class="tumor-info-card">
-
-                        <h2>
-                            Possible Effects
-                        </h2>
-
-                        <p>
-
-                            Depending on its location and
-                            characteristics, a brain tumor
-                            may affect nearby brain tissue
-                            and can be associated with
-                            different neurological symptoms.
-
-                        </p>
-
-
-                        <div class="info-list">
-
-                            <div class="info-item">
-                                Headache and nausea
-                            </div>
-
-                            <div class="info-item">
-                                Seizures
-                            </div>
-
-                            <div class="info-item">
-                                Vision or hearing changes
-                            </div>
-
-                            <div class="info-item">
-                                Balance or movement difficulties
-                            </div>
-
-                            <div class="info-item">
-                                Speech, memory or concentration changes
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="tumor-info-card">
-
-                        <h2>
-                            Possible Causes & Risk Factors
-                        </h2>
-
-                        <p>
-
-                            For many primary brain tumors,
-                            the exact cause is not known.
-                            Certain genetic changes and,
-                            in some cases, significant
-                            exposure to ionizing radiation
-                            can be associated with increased
-                            risk.
-
-                        </p>
-
-                    </div>
-
-
-                    <div class="tumor-info-card">
-
-                        <h2>
-                            Why MRI Analysis?
-                        </h2>
-
-                        <p>
-
-                            MRI provides detailed images
-                            of brain structures. AI-based
-                            image classification can assist
-                            research by identifying patterns
-                            within MRI images.
-
-                        </p>
-
-                    </div>
-
-
-                </div>
-
-
-                <div class="disclaimer">
-
-                    <strong>
-                        Important:
-                    </strong>
-
-                    The visual examples and information in
-                    this section are provided for educational
-                    purposes. MRI appearance can vary widely,
-                    and only qualified medical professionals
-                    can interpret clinical imaging and provide
-                    a diagnosis.
-
-                </div>
-
-
-            </div>
-
-
-            <!-- ABOUT SYSTEM -->
-
-            <div
-                id="about"
-                class="page-section"
-            >
-
-
-                <div class="hero">
-
-                    <div class="hero-label">
-                        NEUROVISION • SYSTEM INFORMATION
-                    </div>
-
-                    <h1>
-                        About
-                        <span>NeuroVision</span>
-                    </h1>
+                <div class="tumor-box">
+
+                    <img
+                        src="/static/tumor_brain.png"
+                        alt="Brain Tumor MRI"
+                    >
+
+                    <h3>
+                        Brain Tumor
+                    </h3>
 
                     <p>
-                        Understanding the architecture
-                        and purpose of the system.
+                        A brain tumor is an abnormal growth of cells
+                        within or around the brain. MRI is commonly
+                        used to visualize brain structures and identify
+                        abnormalities that may require further clinical
+                        evaluation.
                     </p>
 
                 </div>
 
 
-                <div class="about-grid">
+                <div class="tumor-box">
 
+                    <h3>
+                        Possible Effects
+                    </h3>
 
-                    <div class="about-card">
-
-                        <h2>
-                            What is NeuroVision?
-                        </h2>
-
-                        <p>
-
-                            NeuroVision is a deep learning
-                            based brain MRI image
-                            classification project.
-
-                            It provides an interface where
-                            users can upload an MRI image
-                            and obtain an AI-generated
-                            classification result.
-
-                        </p>
-
-
-                        <div class="feature-list">
-
-                            <div class="feature">
-                                🧠 Brain MRI Image Analysis
-                            </div>
-
-                            <div class="feature">
-                                🤖 Deep Learning Classification
-                            </div>
-
-                            <div class="feature">
-                                📊 Prediction Confidence
-                            </div>
-
-                            <div class="feature">
-                                🌐 User-Friendly Web Interface
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="about-card">
-
-                        <h2>
-                            How the System Works
-                        </h2>
-
-                        <p>
-
-                            The uploaded MRI image is
-                            processed before being passed
-                            to the trained model.
-
-                            The model generates a prediction
-                            which is displayed with the
-                            corresponding confidence score.
-
-                        </p>
-
-
-                        <div class="feature-list">
-
-                            <div class="feature">
-                                01 &nbsp; Upload MRI
-                            </div>
-
-                            <div class="feature">
-                                02 &nbsp; Image Preprocessing
-                            </div>
-
-                            <div class="feature">
-                                03 &nbsp; Model Prediction
-                            </div>
-
-                            <div class="feature">
-                                04 &nbsp; Result + Confidence
-                            </div>
-
-                        </div>
-
-                    </div>
-
+                    <p>
+                        Depending on its location and characteristics,
+                        a brain tumor may be associated with symptoms
+                        such as headaches, seizures, vision changes,
+                        weakness, or other neurological changes.
+                    </p>
 
                 </div>
 
 
-                <div class="disclaimer">
+                <div class="tumor-box">
 
-                    <strong>
-                        Important:
-                    </strong>
+                    <h3>
+                        AI Classification
+                    </h3>
 
-                    NeuroVision is intended for research
-                    and educational purposes. AI predictions
-                    should not be used as a substitute for
-                    professional medical diagnosis or advice.
+                    <p>
+                        NeuroVision provides an AI-based classification
+                        of the uploaded MRI image. The result is intended
+                        for educational and research purposes and should
+                        not be used as a medical diagnosis.
+                    </p>
 
                 </div>
-
 
             </div>
-
 
         </section>
 
     </main>
 
-</div>
+
+    <footer class="footer">
+        NeuroVision • AI-Assisted Brain MRI Classification
+    </footer>
 
 
-<script>
-
-    /* ================= NAVIGATION ================= */
-
-    function showSection(sectionId, element) {
-
-        const sections =
-            document.querySelectorAll(
-                ".page-section"
-            );
-
-
-        sections.forEach(
-            function(section) {
-
-                section.classList.remove(
-                    "active-section"
-                );
-
-            }
-        );
+    <script>
+        const fileInput = document.getElementById("fileInput");
+        const fileName = document.getElementById("fileName");
+        const previewContainer = document.getElementById("previewContainer");
+        const mriPreview = document.getElementById("mriPreview");
+        const uploadText = document.getElementById("uploadText");
+        const mriForm = document.getElementById("mriForm");
+        const analyzeButton = document.getElementById("analyzeButton");
+        const loader = document.getElementById("loader");
+        const resultContent = document.getElementById("resultContent");
 
 
-        document
-            .getElementById(sectionId)
-            .classList.add(
-                "active-section"
-            );
+        function showSection(sectionId) {
 
+            const sections = document.querySelectorAll(".page-section");
 
-        const navItems =
-            document.querySelectorAll(
-                ".nav-item"
-            );
+            sections.forEach(function(section) {
+                section.classList.remove("active");
+            });
 
+            const selectedSection = document.getElementById(sectionId);
 
-        navItems.forEach(
-            function(item) {
-
-                item.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-        element.classList.add(
-            "active"
-        );
-
-
-        window.scrollTo({
-
-            top: 0,
-
-            behavior: "smooth"
-
-        });
-
-    }
-
-
-    /* ================= FILE INPUT ================= */
-
-    const fileInput =
-        document.getElementById(
-            "fileInput"
-        );
-
-
-    const fileName =
-        document.getElementById(
-            "fileName"
-        );
-
-
-    const previewContainer =
-        document.getElementById(
-            "previewContainer"
-        );
-
-
-    const mriPreview =
-        document.getElementById(
-            "mriPreview"
-        );
-
-
-    const uploadIcon =
-        document.getElementById(
-            "uploadIcon"
-        );
-
-
-    const uploadText =
-        document.getElementById(
-            "uploadText"
-        );
-
-
-    fileInput.addEventListener(
-        "change",
-        function() {
-
-            if (this.files.length > 0) {
-
-                const file =
-                    this.files[0];
-
-
-                fileName.textContent =
-                    "✓ " + file.name;
-
-
-                const reader =
-                    new FileReader();
-
-
-                reader.onload =
-                    function(e) {
-
-                        mriPreview.src =
-                            e.target.result;
-
-
-                        previewContainer.classList.add(
-                            "show"
-                        );
-
-
-                        uploadIcon.style.display =
-                            "none";
-
-
-                        uploadText.textContent =
-                            "MRI image selected";
-
-                    };
-
-
-                reader.readAsDataURL(file);
-
+            if (selectedSection) {
+                selectedSection.classList.add("active");
             }
 
-            else {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+
+        fileInput.addEventListener("change", function() {
+
+            const file = this.files[0];
+
+            if (!file) {
 
                 fileName.textContent = "";
+                previewContainer.style.display = "none";
 
-                previewContainer.classList.remove(
-                    "show"
-                );
-
-                mriPreview.src = "";
-
-                uploadIcon.style.display =
-                    "flex";
-
-                uploadText.textContent =
-                    "JPG, JPEG or PNG images supported";
-
+                return;
             }
 
-        }
-    );
+            fileName.textContent = file.name;
+            uploadText.textContent = "MRI image selected";
+
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+
+                mriPreview.src = event.target.result;
+
+                previewContainer.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+        });
 
 
-    /* ================= ANALYSIS LOADING ================= */
+        mriForm.addEventListener("submit", async function(event) {
 
-    const form =
-        document.querySelector(
-            "#analysis form"
-        );
+            event.preventDefault();
 
+            const file = fileInput.files[0];
 
-    const button =
-        document.getElementById(
-            "analyzeButton"
-        );
+            if (!file) {
 
+                resultContent.innerHTML = `
+                    <div class="error-box">
+                        Please select an MRI image first.
+                    </div>
+                `;
 
-    const loader =
-        document.getElementById(
-            "analysisLoader"
-        );
-
-
-    form.addEventListener(
-        "submit",
-        function() {
-
-            if (loader) {
-
-                loader.classList.add(
-                    "show"
-                );
-
+                return;
             }
 
 
-            const predictionResult =
-                document.getElementById(
-                    "predictionResult"
-                );
+            const formData = new FormData();
+
+            formData.append("image", file);
 
 
-            const resultPlaceholder =
-                document.getElementById(
-                    "resultPlaceholder"
-                );
+            analyzeButton.disabled = true;
+            analyzeButton.textContent = "Analyzing MRI...";
+
+            resultContent.style.display = "none";
+            loader.style.display = "block";
 
 
-            if (predictionResult) {
+            try {
 
-                predictionResult.style.display =
-                    "none";
+                const response = await fetch("/predict", {
+                    method: "POST",
+                    body: formData
+                });
 
+
+                const data = await response.json();
+
+
+                loader.style.display = "none";
+                resultContent.style.display = "block";
+
+
+                if (!response.ok || !data.success) {
+
+                    resultContent.innerHTML = `
+                        <div class="result-content">
+                            <div class="result-icon">⚠️</div>
+                            <div class="error-box">
+                                ${data.error || "Unable to analyze the MRI image."}
+                            </div>
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                if (data.prediction === "TUMOR") {
+
+                    resultContent.innerHTML = `
+                        <div class="result-content">
+                            <div class="result-icon">⚠️</div>
+
+                            <div class="result-label">
+                                CLASSIFICATION RESULT
+                            </div>
+
+                            <div class="result-value tumor">
+                                TUMOR
+                            </div>
+
+                            <div class="confidence">
+                                Confidence:
+                                <strong>${data.confidence.toFixed(2)}%</strong>
+                            </div>
+                        </div>
+                    `;
+
+                } else {
+
+                    resultContent.innerHTML = `
+                        <div class="result-content">
+                            <div class="result-icon">✓</div>
+
+                            <div class="result-label">
+                                CLASSIFICATION RESULT
+                            </div>
+
+                            <div class="result-value normal">
+                                NORMAL
+                            </div>
+
+                            <div class="confidence">
+                                Confidence:
+                                <strong>${data.confidence.toFixed(2)}%</strong>
+                            </div>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+
+                loader.style.display = "none";
+                resultContent.style.display = "block";
+
+                resultContent.innerHTML = `
+                    <div class="result-content">
+                        <div class="result-icon">⚠️</div>
+
+                        <div class="error-box">
+                            Unable to connect to the NeuroVision server.
+                            Please try again.
+                        </div>
+                    </div>
+                `;
+
+            } finally {
+
+                analyzeButton.disabled = false;
+                analyzeButton.textContent = "Analyze MRI";
             }
 
-
-            if (resultPlaceholder) {
-
-                resultPlaceholder.style.display =
-                    "none";
-
-            }
-
-
-            button.innerHTML =
-                "⟳ &nbsp; Analyzing MRI...";
-
-
-            button.style.opacity =
-                "0.65";
-
-
-            button.style.cursor =
-                "wait";
-
-
-            button.disabled = true;
-
-        }
-    );
-
-
-    /* ================= RESULT PAGE ================= */
-
-    {% if prediction or error %}
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        function() {
-
-            showSection(
-                "analysis",
-                document.querySelectorAll(
-                    ".nav-item"
-                )[1]
-            );
-
-        }
-    );
-
-    {% endif %}
-
-</script>
-
+        });
+    </script>
 
 </body>
-
 </html>
